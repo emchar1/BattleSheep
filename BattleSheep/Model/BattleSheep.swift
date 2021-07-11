@@ -213,8 +213,8 @@ struct BattleSheep: CustomStringConvertible {
         for index in 0..<sheeps.count {
             while true {
                 print("trying... \(sheeps[index].size)")
-                let rowRand = Int.random(in: 0..<BattleSheep.boardSize)// - ((sheeps[index].placement == .left || sheeps[index].placement == .right) ? (index + minSheepSize) : 0))
-                let colRand = Int.random(in: 0..<BattleSheep.boardSize)// - ((sheeps[index].placement == .up || sheeps[index].placement == .down) ? (index + minSheepSize) : 0))
+                let rowRand = Int.random(in: 0..<BattleSheep.boardSize)
+                let colRand = Int.random(in: 0..<BattleSheep.boardSize)
                 let attemptToPlaceSheep = try? sheeps[index].placeSheep(on: &board, at: (row: rowRand, col: colRand))
                 
                 if attemptToPlaceSheep != nil {
