@@ -9,21 +9,25 @@
 /* Begin PBXBuildFile section */
 		EA4F8FF22698BD7A003BB4F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F8FF12698BD7A003BB4F6 /* AppDelegate.swift */; };
 		EA4F8FF42698BD7A003BB4F6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F8FF32698BD7A003BB4F6 /* SceneDelegate.swift */; };
-		EA4F8FF62698BD7A003BB4F6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F8FF52698BD7A003BB4F6 /* ViewController.swift */; };
+		EA4F8FF62698BD7A003BB4F6 /* BattleSheepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F8FF52698BD7A003BB4F6 /* BattleSheepController.swift */; };
 		EA4F8FF92698BD7A003BB4F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA4F8FF72698BD7A003BB4F6 /* Main.storyboard */; };
 		EA4F8FFB2698BD7B003BB4F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA4F8FFA2698BD7B003BB4F6 /* Assets.xcassets */; };
 		EA4F8FFE2698BD7B003BB4F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA4F8FFC2698BD7B003BB4F6 /* LaunchScreen.storyboard */; };
+		EA4F90092698BE31003BB4F6 /* Sheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F90082698BE31003BB4F6 /* Sheep.swift */; };
+		EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		EA4F8FEE2698BD7A003BB4F6 /* BattleSheep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BattleSheep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA4F8FF12698BD7A003BB4F6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA4F8FF32698BD7A003BB4F6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		EA4F8FF52698BD7A003BB4F6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EA4F8FF52698BD7A003BB4F6 /* BattleSheepController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSheepController.swift; sourceTree = "<group>"; };
 		EA4F8FF82698BD7A003BB4F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EA4F8FFA2698BD7B003BB4F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA4F8FFD2698BD7B003BB4F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA4F8FFF2698BD7B003BB4F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EA4F90082698BE31003BB4F6 /* Sheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheep.swift; sourceTree = "<group>"; };
+		EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSheep.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +60,41 @@
 		EA4F8FF02698BD7A003BB4F6 /* BattleSheep */ = {
 			isa = PBXGroup;
 			children = (
+				EA4F90052698BDF6003BB4F6 /* Model */,
+				EA4F90062698BE06003BB4F6 /* View */,
+				EA4F90072698BE0B003BB4F6 /* Controller */,
 				EA4F8FF12698BD7A003BB4F6 /* AppDelegate.swift */,
 				EA4F8FF32698BD7A003BB4F6 /* SceneDelegate.swift */,
-				EA4F8FF52698BD7A003BB4F6 /* ViewController.swift */,
-				EA4F8FF72698BD7A003BB4F6 /* Main.storyboard */,
 				EA4F8FFA2698BD7B003BB4F6 /* Assets.xcassets */,
 				EA4F8FFC2698BD7B003BB4F6 /* LaunchScreen.storyboard */,
 				EA4F8FFF2698BD7B003BB4F6 /* Info.plist */,
 			);
 			path = BattleSheep;
+			sourceTree = "<group>";
+		};
+		EA4F90052698BDF6003BB4F6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EA4F90082698BE31003BB4F6 /* Sheep.swift */,
+				EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EA4F90062698BE06003BB4F6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EA4F8FF72698BD7A003BB4F6 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EA4F90072698BE0B003BB4F6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EA4F8FF52698BD7A003BB4F6 /* BattleSheepController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,9 +167,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4F8FF62698BD7A003BB4F6 /* ViewController.swift in Sources */,
+				EA4F8FF62698BD7A003BB4F6 /* BattleSheepController.swift in Sources */,
+				EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */,
 				EA4F8FF22698BD7A003BB4F6 /* AppDelegate.swift in Sources */,
 				EA4F8FF42698BD7A003BB4F6 /* SceneDelegate.swift in Sources */,
+				EA4F90092698BE31003BB4F6 /* Sheep.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
