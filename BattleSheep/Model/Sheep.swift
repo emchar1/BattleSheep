@@ -25,7 +25,7 @@ struct Sheep {
     
     //Properties
     let size: Int
-    var coordinates: [(row: Int, col: Int)] = []
+    var coordinates: [Coordinates] = []
     var bodyParts: [BodyPart] = []
     var statuses: [BoardStatus]
     var placement: Placement?
@@ -41,7 +41,7 @@ struct Sheep {
     }
 
     
-    //Methods
+    // MARK: - Methods
     init(size: Int) {
         self.size = size
         statuses = Array(repeating: .sheep, count: size)
@@ -59,18 +59,19 @@ struct Sheep {
     }
     
     mutating func placeSheep(on board: inout [[BoardStatus]],
-                             at location: (row: Int, col: Int),
+                             at location: Coordinates,
                              placement: Placement = .allCases.randomElement()!) throws -> Bool? {
         
+        let placementLR = placement == .left || placement == .right
+        let placementUD = placement == .up || placement == .down
+        
         //Placement checks
-        guard ((placement == .left || placement == .right) && location.row + size < board.count) ||
-                ((placement == .up || placement == .down) && location.col + size < board.count) else {
+        guard (placementLR && location.row + size < board.count) || (placementUD && location.col + size < board.count) else {
             throw PlacementError.notEnoughRoom
         }
         
         for space in 0..<size {
-            guard ((placement == .left || placement == .right) && board[location.row + space][location.col] == .blank) ||
-                    ((placement == .up || placement == .down) && board[location.row][location.col + space] == .blank) else {
+            guard (placementLR && board[location.row + space][location.col] == .blank) || (placementUD && board[location.row][location.col + space] == .blank) else {
                 throw PlacementError.noBlankSpaces
             }
         }
@@ -79,10 +80,11 @@ struct Sheep {
         self.placement = placement
 
         for space in 0..<size {
-            let row = location.row + ((placement == .left || placement == .right) ? space : 0)
-            let col = location.col + ((placement == .left || placement == .right) ? 0 : space)
-            board[row][col] = .sheep
-            coordinates.append((row: row, col: col))
+            let newLocation = Coordinates(row: location.row + (placementLR ? space : 0),
+                                          col: location.col + (placementLR ? 0 : space))!
+            
+            board[newLocation.row][newLocation.col] = .sheep
+            coordinates.append(newLocation)
         }
 
         return true

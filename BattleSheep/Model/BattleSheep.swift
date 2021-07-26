@@ -27,17 +27,23 @@ protocol BattleSheepDelegate {
 }
 
 
-// MARK: - BattleSheep
 struct BattleSheep: CustomStringConvertible {
     
-    //Properties
+    // MARK: - Computer AI Properties
+    var cpuLastMove: (location: Coordinates, status: BoardStatus)!// = (Coordinates(row: 0, col: 0)!, .blank)
+    var cpuNextMove: (location: Coordinates, status: BoardStatus)!
+    var cpuFoundSheepInitialLocation: Coordinates?// = Coordinates(row: 0, col: 0)
+    var cpuFoundSheepDirection: (lr: Int, ud: Int) = (1, 0)
+
+    
+    // MARK: - Properties
     static let boardSize = 10
     var totalAttacks = 0
     var totalHits = 0
     var board = [[BoardStatus]]()
     var sheeps = [Sheep]()
     var delegate: BattleSheepDelegate?
-
+    
     var isGameOver: Bool {
         return sheepRemaining == 0 ? true : false
     }
@@ -102,7 +108,7 @@ struct BattleSheep: CustomStringConvertible {
     }
     
     
-    //Methods
+    // MARK: - Methods
     init() {
         newGame()
     }
@@ -112,51 +118,38 @@ struct BattleSheep: CustomStringConvertible {
         placeAllSheep()
     }
     
-    mutating func fire(at coordinates: (row: Int, col: Int)) {
-        guard let letterTemp = UnicodeScalar(coordinates.row + 97) else {
-            print(Responses.invalidInput.rawValue)
-            return
-        }
-        
-        let letter = Character(letterTemp)
-        let number = coordinates.col + 1
-        
-        fire(at: "\(letter)\(number)")
+    func getRandomSpace() -> Int {
+        return Int.random(in: 0..<BattleSheep.boardSize)
     }
     
-    mutating func fire(at location: String) {
+    @discardableResult mutating func fire(at coordinates: Coordinates) -> BoardStatus? {
+        return fire(at: coordinates.a1)
+    }
+    
+    @discardableResult mutating func fire(at a1: String) -> BoardStatus? {
         guard !isGameOver else {
             print(Responses.gameOver.rawValue)
-            return
+            return nil
         }
         
-        print("\n")
+//        print("\n")
         
-        guard let rowTemp = Unicode.Scalar(location.prefix(1).lowercased()),
-              let colTemp = Int(String(location.suffix(location.count - 1))) else {
-            print(Responses.invalidInput.rawValue)
-            return
+        guard let location = Coordinates(at: a1) else {
+            return nil
         }
         
-        let row = Int((rowTemp as UnicodeScalar).value) - 97
-        let col = colTemp - 1
-
-        guard row < BattleSheep.boardSize && col >= 0 && col < BattleSheep.boardSize else {
-            print(Responses.invalidInput.rawValue)
-            return
-        }
-
         
         //SUCCESS!
-        switch board[row][col] {
+        switch board[location.row][location.col] {
         case .blank:
-            board[row][col] = .miss
+            board[location.row][location.col] = .miss
             totalAttacks += 1
-            print(Responses.miss.rawValue)
+//            print(Responses.miss.rawValue)
         case .miss, .hit, .sink:
-            print(Responses.alreadyAttacked.rawValue)
+//            print(Responses.alreadyAttacked.rawValue)
+            return nil
         case .sheep:
-            board[row][col] = .hit
+            board[location.row][location.col] = .hit
             totalHits += 1
             totalAttacks += 1
 
@@ -165,19 +158,22 @@ struct BattleSheep: CustomStringConvertible {
             
             for (index, sheep) in sheeps.enumerated() {
                 for (jndex, coordinates) in sheep.coordinates.enumerated() {
-                    if (row, col) == coordinates {
+                    if location == coordinates {
                         sheeps[index].statuses[jndex] = .hit
                         
                         if sheeps[index].isShorn {
                             
                             //This feels inefficient but seems the only way to go???
                             for kndex in 0..<sheep.size {
+                                let sinkLocation = sheeps[index].coordinates[kndex]
+                                
+                                board[sinkLocation.row][sinkLocation.col] = .sink
                                 sheeps[index].statuses[kndex] = .sink
-                                board[sheeps[index].coordinates[kndex].row][sheeps[index].coordinates[kndex].col] = .sink
                             }
                             
                             delegate?.didShearSheep(self)
                             didShearBattleSheep = true
+                            print("I'm sinking!!!")
                         }
                         stopCheckingSheep = true
                         break
@@ -189,8 +185,8 @@ struct BattleSheep: CustomStringConvertible {
                 }
             }
             
-            print(Responses.hit.rawValue + (didShearBattleSheep ? " \(Responses.shearedBattleSheep.rawValue)" : ""))
-            print("BattleSheep remaining: \(sheepRemaining)/\(sheeps.count)")
+//            print(Responses.hit.rawValue + (didShearBattleSheep ? " \(Responses.shearedBattleSheep.rawValue)" : ""))
+//            print("BattleSheep remaining: \(sheepRemaining)/\(sheeps.count)")
 
             if didShearBattleSheep && isGameOver {
                 print(Responses.gameOver.rawValue)
@@ -198,10 +194,111 @@ struct BattleSheep: CustomStringConvertible {
             }
         }
         
-        print(self)
+//        print(self)
+        
+        return board[location.row][location.col]
     }
     
-    //Helper methods
+    
+    // MARK: - Computer AI
+    
+    //Computer moves
+    mutating func cpuMove() {
+        
+        if cpuFoundSheepInitialLocation == nil { //start of a new search
+            print("cpuFoundSheepInitialLocation = nil")
+            cpuMoveHelper()
+        }
+        else { //found a sheep, start looking at surrounding coordinates
+            var move = Coordinates(row: cpuLastMove.location.row + cpuFoundSheepDirection.ud,
+                                   col: cpuLastMove.location.col + cpuFoundSheepDirection.lr)
+            //If reach end of bounds, keep cycling until you're back in bounds of the board.
+            while move == nil {
+                cpuChangeDirections()
+                move = Coordinates(row: cpuLastMove.location.row + cpuFoundSheepDirection.ud,
+                                   col: cpuLastMove.location.col + cpuFoundSheepDirection.lr)
+            }
+            
+            cpuNextMove = (move!, board[move!.row][move!.col])
+            
+            if cpuNextMove.status == .sheep {
+                cpuLastMove = cpuNextMove
+                fire(at: cpuNextMove.location)
+                print("if status = .sheep")
+                print("   last/next: \(cpuLastMove!)")
+//                if cpuNextMove.status == .sink {
+//                    cpuFoundSheepInitialLocation = nil
+//                    print("sank! restarting...")
+//
+//                    if isGameOver {
+//                        cpuLastMove = nil
+//                        cpuFoundSheepDirection = (1, 0)
+//                        print("gave over check")
+//                    }
+//                }
+            }
+            else if cpuNextMove.status == .blank { //dead end, start at initial sheep found position
+                cpuLastMove = (cpuFoundSheepInitialLocation!, .sheep)
+                fire(at: cpuNextMove.location)
+                cpuChangeDirections()
+                print("if status = .blank")
+                print("   last: \(cpuLastMove!)")
+                print("   next: \(cpuNextMove!)")
+            }
+            else { //.hit, .miss, .sink
+                var infiniteBreak = 0
+                
+                while cpuNextMove.status == .hit || cpuNextMove.status == .miss || cpuNextMove.status == .sink {
+                    
+                    var move = Coordinates(row: cpuLastMove.location.row + cpuFoundSheepDirection.ud,
+                                           col: cpuLastMove.location.col + cpuFoundSheepDirection.lr)
+                    //If reach end of bounds, keep cycling until you're back in bounds of the board.
+                    while move == nil {
+                        cpuChangeDirections()
+                        move = Coordinates(row: cpuLastMove.location.row + cpuFoundSheepDirection.ud,
+                                           col: cpuLastMove.location.col + cpuFoundSheepDirection.lr)
+                    }
+                    
+                    cpuLastMove = (move!, board[move!.row][move!.col])
+
+                    infiniteBreak += 1
+                    if infiniteBreak > 4 {
+                        cpuFoundSheepInitialLocation = nil
+                        cpuMoveHelper()
+                        break
+                    }
+                }
+                
+            }//end else .hit, miss, .sink
+        }//end else found sheep
+    }//end cpuMove()
+    
+    
+    private mutating func cpuMoveHelper() {
+        while true { //loop until you hit a .blank or .sheep
+            guard let move = Coordinates(row: getRandomSpace(), col: getRandomSpace()) else {
+                fatalError("Something went wrong!")
+            }
+            
+            cpuNextMove = (move, board[move.row][move.col])
+            
+            if cpuNextMove.status == .blank || cpuNextMove.status == .sheep {
+                if cpuNextMove.status == .sheep {
+                    cpuFoundSheepInitialLocation = cpuNextMove.location
+                }
+
+                cpuLastMove = cpuNextMove
+                fire(at: cpuNextMove.location)
+                print("New search (random)")
+                print("   last/next: \(cpuLastMove!)")
+                break
+            }
+        }
+    }
+    
+    
+    // MARK: - Helper methods
+    
     private mutating func resetBoard() {
         board = Array(repeating: Array(repeating: .blank, count: BattleSheep.boardSize), count: BattleSheep.boardSize)
         sheeps = [Sheep(size: 2), Sheep(size: 3), Sheep(size: 3), Sheep(size: 4), Sheep(size: 5)]
@@ -212,17 +309,29 @@ struct BattleSheep: CustomStringConvertible {
     private mutating func placeAllSheep() {
         for index in 0..<sheeps.count {
             while true {
-                print("trying... \(sheeps[index].size)")
-                let rowRand = Int.random(in: 0..<BattleSheep.boardSize)
-                let colRand = Int.random(in: 0..<BattleSheep.boardSize)
-                let attemptToPlaceSheep = try? sheeps[index].placeSheep(on: &board, at: (row: rowRand, col: colRand))
-                
+                let attemptToPlaceSheep = try? sheeps[index].placeSheep(on: &board,
+                                                                        at: Coordinates(row: getRandomSpace(), col: getRandomSpace())!)
                 if attemptToPlaceSheep != nil {
                     break
                 }
             }
         }
-        
-        print("Placed sheep.")
     }
+    
+    private mutating func cpuChangeDirections() {
+        //cpuFoundSheepDirection(lr: Int, ud: Int)
+        switch cpuFoundSheepDirection {
+        case (1, 0):
+            cpuFoundSheepDirection = (-1, 0) //change left
+        case (-1, 0):
+            cpuFoundSheepDirection = (0, -1) //change up
+        case (0, -1):
+            cpuFoundSheepDirection = (0, 1) //change down
+        case (0, 1):
+            cpuFoundSheepDirection = (1, 0) //change right
+        default:
+            print("cpuFoundSheepDirection invalid value.")
+        }
+    }
+
 }

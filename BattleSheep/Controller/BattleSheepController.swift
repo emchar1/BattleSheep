@@ -16,26 +16,42 @@ class CollectionCell: UICollectionViewCell {
     }
 }
 
+class CC: UICollectionViewCell {
+    @IBOutlet weak var label2: UILabel!
+    
+    override class func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}
+
 
 // MARK: - BattleSheepController
 class BattleSheepController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var cv2: UICollectionView!
     @IBOutlet weak var statusLabel: UILabel!
-    var battleSheep = BattleSheep()
+    var player1 = BattleSheep()
+    var player2 = BattleSheep()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        battleSheep.delegate = self
+        cv2.delegate = self
+        cv2.dataSource = self
+        cv2.isUserInteractionEnabled = false
+        player1.delegate = self
         statusLabel.text = ""
     }
     
     @IBAction func newGamePressed(_ sender: UIButton) {
-        battleSheep.newGame()
+        player1.newGame()
+        player2.newGame()
         statusLabel.text = ""
+        collectionView.isUserInteractionEnabled = true
         collectionView.reloadData()
+        cv2.reloadData()
     }
 }
 
@@ -49,43 +65,79 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return BattleSheep.boardSize * BattleSheep.boardSize
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
         let row = indexPath.row / BattleSheep.boardSize
         let col = indexPath.row % BattleSheep.boardSize
-
-        switch battleSheep.board[row][col] {
-        case .blank, .sheep:
-            cell.backgroundColor = .lightGray
-        case .hit:
-            cell.backgroundColor = .green
-        case .miss:
-            cell.backgroundColor = .red
-        case .sink:
-            cell.backgroundColor = .darkGray
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        var player: BattleSheep
+        
+        if cell is CollectionCell {
+            player = player1
         }
-
-//        cell.label.text = ""
+        else {
+            player = player2
+        }
+        
+        switch player.board[row][col] {
+        case .blank:
+            cell.backgroundColor = .lightGray
+        case .sheep:
+            cell.backgroundColor = cell is CollectionCell ? .lightGray : .white
+        case .hit:
+            cell.backgroundColor = .red
+        case .miss:
+            cell.backgroundColor = .gray
+        case .sink:
+            cell.backgroundColor = .black
+        }
         
         //Uncomment to debug
-        cell.label.text = "\(battleSheep.board[row][col].rawValue)"
-        
+        if let cell = cell as? CollectionCell {
+            cell.label.text = ""
+//            cell.label.text = "\(player1.board[row][col].rawValue)"
+        }
+        if let cell = cell as? CC {
+            cell.label2.text = ""
+//            cell.label2.text = "\(player1.board[row][col].rawValue)"
+        }
+
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let row = indexPath.row / BattleSheep.boardSize
-        let col = indexPath.row % BattleSheep.boardSize
-
-        statusLabel.text = ""
-        battleSheep.fire(at: (row: row, col: col))
-
-        if battleSheep.isGameOver {
-            statusLabel.text = "Game Over. Press 'New Game' to play again.\nAccuracy: \(Int(Double(battleSheep.totalHits)/Double(battleSheep.totalAttacks) * 100))%"
+        guard !player1.isGameOver && !player2.isGameOver else {
+            return
         }
         
+        guard player1.fire(at: Coordinates(row: indexPath.row / BattleSheep.boardSize,
+                                           col: indexPath.row % BattleSheep.boardSize)!) != nil else {
+            statusLabel.text = "You've already attacked this area."
+            return
+        }
+
+        statusLabel.text = ""
+        player2.cpuMove()
+        
+        self.collectionView.isUserInteractionEnabled = false
+        statusLabel.text = "CPU attacking..."
         collectionView.reloadData()
+        if player1.isGameOver {
+            statusLabel.text = "YOU WIN!!!\nPress 'New Game' to play again.\nAccuracy: \(Int(Double(player1.totalHits)/Double(player1.totalAttacks) * 100))%"
+            self.collectionView.isUserInteractionEnabled = false
+        }
+
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 1...2)) {
+            self.collectionView.isUserInteractionEnabled = true
+            self.statusLabel.text = ""
+            self.cv2.reloadData()
+            if self.player2.isGameOver {
+                self.statusLabel.text = "YOU LOSE!\nPress 'New Game' to play again."
+                self.collectionView.isUserInteractionEnabled = false
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -94,7 +146,7 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         let numColumns = BattleSheep.boardSize
         let cellSize = (collectionView.frame.width - CGFloat(2 * edgeInsets + (numColumns - 1) * cellBorderSize)) / CGFloat(numColumns)
         
-        return CGSize(width: cellSize, height: cellSize)
+        return CGSize(width: cellSize, height: cellSize * 0.8)
     }
 }
 
@@ -103,5 +155,6 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
 extension BattleSheepController: BattleSheepDelegate {
     func didShearSheep(_ controller: BattleSheep) {
         statusLabel.text = "You blew up a sheep!"
+        print("You blew up a sheep!")
     }
 }

@@ -15,6 +15,7 @@
 		EA4F8FFE2698BD7B003BB4F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA4F8FFC2698BD7B003BB4F6 /* LaunchScreen.storyboard */; };
 		EA4F90092698BE31003BB4F6 /* Sheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F90082698BE31003BB4F6 /* Sheep.swift */; };
 		EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */; };
+		EA584C5A26A173480010F740 /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA584C5926A173480010F740 /* Coordinates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		EA4F8FFF2698BD7B003BB4F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA4F90082698BE31003BB4F6 /* Sheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheep.swift; sourceTree = "<group>"; };
 		EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSheep.swift; sourceTree = "<group>"; };
+		EA584C5926A173480010F740 /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 		EA4F90052698BDF6003BB4F6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EA584C5926A173480010F740 /* Coordinates.swift */,
 				EA4F90082698BE31003BB4F6 /* Sheep.swift */,
 				EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */,
 			);
@@ -170,6 +173,7 @@
 				EA4F8FF62698BD7A003BB4F6 /* BattleSheepController.swift in Sources */,
 				EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */,
 				EA4F8FF22698BD7A003BB4F6 /* AppDelegate.swift in Sources */,
+				EA584C5A26A173480010F740 /* Coordinates.swift in Sources */,
 				EA4F8FF42698BD7A003BB4F6 /* SceneDelegate.swift in Sources */,
 				EA4F90092698BE31003BB4F6 /* Sheep.swift in Sources */,
 			);
