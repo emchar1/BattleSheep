@@ -184,9 +184,7 @@ struct BattleSheep: CustomStringConvertible {
     }
     
     
-    // MARK: - Computer AI
-    
-    //Computer moves
+    // MARK: - Computer AI v1 (Grady/Normal)
     mutating func cpuMove() {
         if cpuFoundSheepInitialLocation == nil { //start of a new search
             print("cpuFoundSheepInitialLocation = nil")
@@ -226,20 +224,20 @@ struct BattleSheep: CustomStringConvertible {
                     cpuNextMove = (move, board[move.row][move.col])
                     cpuChangeDirections()
                     
-//                    if cpuNextMove!.status == .blank {
-                    if cpuNextMove!.status != .sheep {
-                        cpuLastMove = (location: cpuFoundSheepInitialLocation!, status: board[cpuFoundSheepInitialLocation!.row][cpuFoundSheepInitialLocation!.col])
-                    }
-                    else if cpuNextMove!.status == .sheep {
+                    if cpuNextMove!.status == .sheep {
                         cpuLastMove = cpuNextMove
-                    }
-
-                    infiniteBreak += 1
-                    if infiniteBreak > 4 {
-                        cpuFoundSheepInitialLocation = nil
-//                        cpuMoveHelperRandomAttack()
-                        print("AAAAAAHHHH!")
                         break
+                    }
+                    else {
+                        cpuLastMove = (location: cpuFoundSheepInitialLocation!, status: board[cpuFoundSheepInitialLocation!.row][cpuFoundSheepInitialLocation!.col])
+                        
+                        infiniteBreak += 1
+                        if infiniteBreak > 4 {
+                            cpuFoundSheepInitialLocation = nil
+    //                        cpuMoveHelperRandomAttack()
+                            print("AAAAAAHHHH!")
+                            break
+                        }
                     }
                 }
                 
@@ -256,7 +254,6 @@ struct BattleSheep: CustomStringConvertible {
             }//end else .hit, miss, .sink
         }//end else found sheep
     }//end cpuMove()
-    
     
     private mutating func cpuMoveHelperRandomAttack() {
         while true { //loop until you hit a .blank or .sheep
@@ -292,6 +289,66 @@ struct BattleSheep: CustomStringConvertible {
         }
         
         return move!
+    }
+    
+    
+    // MARK: - Computer AI v2 (Basman/Normal)
+    mutating func cpuMove2() {
+        for (row, boardRow) in board.enumerated() {
+            for (col, boardCol) in boardRow.enumerated() {
+                if boardCol == .hit {
+                    //Start the sheep search!
+                    if cpuMoveHelperFindSheep(at: Coordinates(row: row, col: col)!) {
+                        return
+                    }
+                }
+            }
+        }
+        
+        cpuMoveHelperRandomAttack()
+    }
+    
+    private mutating func cpuMoveHelperFindSheep(at coordinates: Coordinates) -> Bool {
+        //Attack up
+        if let attack = Coordinates(row: coordinates.row - 1, col: coordinates.col) {
+            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
+                fire(at: attack)
+                return true
+            }
+        }
+        
+        //Attack down
+        if let attack = Coordinates(row: coordinates.row + 1, col: coordinates.col) {
+            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
+                fire(at: attack)
+                return true
+            }
+        }
+        
+        //Attack left
+        if let attack = Coordinates(row: coordinates.row, col: coordinates.col - 1) {
+            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
+                fire(at: attack)
+                return true
+            }
+        }
+        
+        //Attack right
+        if let attack = Coordinates(row: coordinates.row, col: coordinates.col + 1) {
+            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
+                fire(at: attack)
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    // MARK: - Computer AI v3 (Sebastien/Easy)
+    
+    mutating func cpuMove3() {
+        //Just a simple random attack always
+        cpuMoveHelperRandomAttack()
     }
     
     

@@ -118,7 +118,7 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         }
 
         statusLabel.text = ""
-        player2.cpuMove()
+        player2.cpuMove2()
         
         self.collectionView.isUserInteractionEnabled = false
         statusLabel.text = "CPU attacking..."
