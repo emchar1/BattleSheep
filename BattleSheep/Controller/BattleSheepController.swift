@@ -126,16 +126,19 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         if player1.isGameOver {
             statusLabel.text = "YOU WIN!!!\nPress 'New Game' to play again.\nAccuracy: \(Int(Double(player1.totalHits)/Double(player1.totalAttacks) * 100))%"
             self.collectionView.isUserInteractionEnabled = false
+            
+            return
         }
 
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 1...2)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0...0)) {
             self.collectionView.isUserInteractionEnabled = true
             self.statusLabel.text = ""
             self.cv2.reloadData()
             if self.player2.isGameOver {
                 self.statusLabel.text = "YOU LOSE!\nPress 'New Game' to play again."
                 self.collectionView.isUserInteractionEnabled = false
+                
+                return
             }
         }
     }
