@@ -184,7 +184,7 @@ struct BattleSheep: CustomStringConvertible {
     }
     
     
-    // MARK: - Computer AI v1 (Grady/Normal)
+    // MARK: - Computer AI v1 (Grady/Normal/Spastic)
     mutating func cpuMove() {
         if cpuFoundSheepInitialLocation == nil { //start of a new search
             print("cpuFoundSheepInitialLocation = nil")
@@ -292,7 +292,7 @@ struct BattleSheep: CustomStringConvertible {
     }
     
     
-    // MARK: - Computer AI v2 (Basman/Normal)
+    // MARK: - Computer AI v2 (Eddie/Normal/Thorough)
     mutating func cpuMove2() {
         for (row, boardRow) in board.enumerated() {
             for (col, boardCol) in boardRow.enumerated() {
@@ -344,7 +344,7 @@ struct BattleSheep: CustomStringConvertible {
         return false
     }
     
-    // MARK: - Computer AI v3 (Sebastien/Easy)
+    // MARK: - Computer AI v3 (Sebastien/Easy/Random)
     
     mutating func cpuMove3() {
         //Just a simple random attack always
