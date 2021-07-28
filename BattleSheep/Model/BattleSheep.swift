@@ -34,6 +34,7 @@ struct BattleSheep: CustomStringConvertible {
     var cpuNextMove: (location: Coordinates, status: BoardStatus)!
     var cpuFoundSheepInitialLocation: Coordinates?
     var cpuFoundSheepDirection: (lr: Int, ud: Int) = (1, 0)
+    var iLeftOff = 0
 
     
     // MARK: - Properties
@@ -43,8 +44,9 @@ struct BattleSheep: CustomStringConvertible {
     var board = [[BoardStatus]]()
     var sheeps = [Sheep]()
     var delegate: BattleSheepDelegate?
+    var winsCount = 0
     
-    var isGameOver: Bool {
+    var didWin: Bool {
         return sheepRemaining == 0 ? true : false
     }
 
@@ -127,7 +129,7 @@ struct BattleSheep: CustomStringConvertible {
     }
     
     @discardableResult mutating func fire(at a1: String) -> BoardStatus? {
-        guard !isGameOver else {
+        guard !didWin else {
             print(Responses.gameOver.rawValue)
             return nil
         }
@@ -291,6 +293,29 @@ struct BattleSheep: CustomStringConvertible {
         return move!
     }
     
+    private mutating func cpuChangeDirections(reverse: Bool = false) {
+        guard !reverse else {
+            cpuFoundSheepDirection.lr *= -1
+            cpuFoundSheepDirection.ud *= -1
+            return
+        }
+        
+        
+        //cpuFoundSheepDirection(lr: Int, ud: Int)
+        switch cpuFoundSheepDirection {
+        case (1, 0):
+            cpuFoundSheepDirection = (-1, 0) //change left
+        case (-1, 0):
+            cpuFoundSheepDirection = (0, -1) //change up
+        case (0, -1):
+            cpuFoundSheepDirection = (0, 1) //change down
+        case (0, 1):
+            cpuFoundSheepDirection = (1, 0) //change right
+        default:
+            print("cpuFoundSheepDirection invalid value.")
+        }
+    }
+    
     
     // MARK: - Computer AI v2 (Eddie/Normal/Thorough)
     mutating func cpuMove2() {
@@ -298,7 +323,7 @@ struct BattleSheep: CustomStringConvertible {
             for (col, boardCol) in boardRow.enumerated() {
                 if boardCol == .hit {
                     //Start the sheep search!
-                    if cpuMoveHelperFindSheep(at: Coordinates(row: row, col: col)!) {
+                    if cpuMoveHelperFindSheep(at: Coordinates(row: row, col: col)!, iStart: iLeftOff) {
                         return
                     }
                 }
@@ -308,36 +333,27 @@ struct BattleSheep: CustomStringConvertible {
         cpuMoveHelperRandomAttack()
     }
     
-    private mutating func cpuMoveHelperFindSheep(at coordinates: Coordinates) -> Bool {
-        //Attack up
-        if let attack = Coordinates(row: coordinates.row - 1, col: coordinates.col) {
-            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
-                fire(at: attack)
-                return true
-            }
-        }
-        
-        //Attack down
-        if let attack = Coordinates(row: coordinates.row + 1, col: coordinates.col) {
-            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
-                fire(at: attack)
-                return true
-            }
-        }
-        
-        //Attack left
-        if let attack = Coordinates(row: coordinates.row, col: coordinates.col - 1) {
-            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
-                fire(at: attack)
-                return true
-            }
-        }
-        
-        //Attack right
-        if let attack = Coordinates(row: coordinates.row, col: coordinates.col + 1) {
-            if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
-                fire(at: attack)
-                return true
+    private mutating func cpuMoveHelperFindSheep(at coordinates: Coordinates, iStart: Int = 0) -> Bool {
+        for h in (0...1).reversed() {
+            for i in (h == 0 ? 0 : iStart)..<(h == 0 ? iStart : 4) {
+                var incrementer: (row: Int, col: Int) = (0, 0)
+                
+                switch i {
+                case 0: incrementer = (-1, 0)
+                case 1: incrementer = (1, 0)
+                case 2: incrementer = (0, -1)
+                case 3: incrementer = (0, 1)
+                default: incrementer = (0, 0)
+                }
+                
+                if let attack = Coordinates(row: coordinates.row + incrementer.row, col: coordinates.col + incrementer.col) {
+                    if board[attack.row][attack.col] == .sheep || board[attack.row][attack.col] == .blank {
+                        fire(at: attack)
+                        print("********************incrementer (\(i)): \(incrementer)")
+                        iLeftOff = i
+                        return true
+                    }
+                }
             }
         }
         
@@ -372,28 +388,6 @@ struct BattleSheep: CustomStringConvertible {
             }
         }
     }
-    
-    private mutating func cpuChangeDirections(reverse: Bool = false) {
-        guard !reverse else {
-            cpuFoundSheepDirection.lr *= -1
-            cpuFoundSheepDirection.ud *= -1
-            return
-        }
-        
-        
-        //cpuFoundSheepDirection(lr: Int, ud: Int)
-        switch cpuFoundSheepDirection {
-        case (1, 0):
-            cpuFoundSheepDirection = (-1, 0) //change left
-        case (-1, 0):
-            cpuFoundSheepDirection = (0, -1) //change up
-        case (0, -1):
-            cpuFoundSheepDirection = (0, 1) //change down
-        case (0, 1):
-            cpuFoundSheepDirection = (1, 0) //change right
-        default:
-            print("cpuFoundSheepDirection invalid value.")
-        }
-    }
+
 
 }

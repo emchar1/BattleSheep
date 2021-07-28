@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - CollectionCell
-class CollectionCell: UICollectionViewCell {
+class CollectionCellPlayer: UICollectionViewCell {
     @IBOutlet weak var label: UILabel!
     
     override class func awakeFromNib() {
@@ -16,7 +16,7 @@ class CollectionCell: UICollectionViewCell {
     }
 }
 
-class CC: UICollectionViewCell {
+class CollectionCellCPU: UICollectionViewCell {
     @IBOutlet weak var label2: UILabel!
     
     override class func awakeFromNib() {
@@ -27,20 +27,22 @@ class CC: UICollectionViewCell {
 
 // MARK: - BattleSheepController
 class BattleSheepController: UIViewController {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var cv2: UICollectionView!
+    @IBOutlet weak var collectionViewPlayer: UICollectionView!
+    @IBOutlet weak var collectionViewCPU: UICollectionView!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var winsLossesLabel: UILabel!
     var player1 = BattleSheep()
     var player2 = BattleSheep()
+    var winStreak = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        cv2.delegate = self
-        cv2.dataSource = self
-        cv2.isUserInteractionEnabled = false
+        collectionViewPlayer.delegate = self
+        collectionViewPlayer.dataSource = self
+        collectionViewCPU.delegate = self
+        collectionViewCPU.dataSource = self
+        collectionViewCPU.isUserInteractionEnabled = false
         player1.delegate = self
         statusLabel.text = ""
     }
@@ -49,9 +51,9 @@ class BattleSheepController: UIViewController {
         player1.newGame()
         player2.newGame()
         statusLabel.text = ""
-        collectionView.isUserInteractionEnabled = true
-        collectionView.reloadData()
-        cv2.reloadData()
+        collectionViewPlayer.isUserInteractionEnabled = true
+        collectionViewPlayer.reloadData()
+        collectionViewCPU.reloadData()
     }
 }
 
@@ -72,7 +74,7 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
         var player: BattleSheep
         
-        if cell is CollectionCell {
+        if cell is CollectionCellPlayer {
             player = player1
         }
         else {
@@ -83,7 +85,7 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         case .blank:
             cell.backgroundColor = .lightGray
         case .sheep:
-            cell.backgroundColor = cell is CollectionCell ? .lightGray : .white
+            cell.backgroundColor = (cell is CollectionCellPlayer && !player2.didWin) ? .lightGray : .white
         case .hit:
             cell.backgroundColor = .red
         case .miss:
@@ -93,11 +95,11 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         }
         
         //Uncomment to debug
-        if let cell = cell as? CollectionCell {
+        if let cell = cell as? CollectionCellPlayer {
             cell.label.text = ""
 //            cell.label.text = "\(player1.board[row][col].rawValue)"
         }
-        if let cell = cell as? CC {
+        if let cell = cell as? CollectionCellCPU {
             cell.label2.text = ""
 //            cell.label2.text = "\(player1.board[row][col].rawValue)"
         }
@@ -107,7 +109,7 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard !player1.isGameOver && !player2.isGameOver else {
+        guard !player1.didWin && !player2.didWin else {
             return
         }
         
@@ -120,23 +122,30 @@ extension BattleSheepController: UICollectionViewDelegate, UICollectionViewDataS
         statusLabel.text = ""
         player2.cpuMove2()
         
-        self.collectionView.isUserInteractionEnabled = false
+        self.collectionViewPlayer.isUserInteractionEnabled = false
         statusLabel.text = "CPU attacking..."
         collectionView.reloadData()
-        if player1.isGameOver {
+        if player1.didWin {
+            player1.winsCount += 1
+            winsLossesLabel.text = "Wins: \(player1.winsCount), Losses: \(player2.winsCount), Streak: \(winStreak)"
+            winStreak += 1
             statusLabel.text = "YOU WIN!!!\nPress 'New Game' to play again.\nAccuracy: \(Int(Double(player1.totalHits)/Double(player1.totalAttacks) * 100))%"
-            self.collectionView.isUserInteractionEnabled = false
+            self.collectionViewPlayer.isUserInteractionEnabled = false
             
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0...0)) {
-            self.collectionView.isUserInteractionEnabled = true
-            self.statusLabel.text = ""
-            self.cv2.reloadData()
-            if self.player2.isGameOver {
-                self.statusLabel.text = "YOU LOSE!\nPress 'New Game' to play again."
-                self.collectionView.isUserInteractionEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0...0)) { [self] in
+            collectionViewPlayer.isUserInteractionEnabled = true
+            statusLabel.text = ""
+            collectionViewCPU.reloadData()
+            
+            if player2.didWin {
+                player2.winsCount += 1
+                winStreak = 0
+                winsLossesLabel.text = "Wins: \(player1.winsCount), Losses: \(player2.winsCount), Streak: \(winStreak)"
+                statusLabel.text = "YOU LOSE!\nPress 'New Game' to play again."
+                collectionViewPlayer.isUserInteractionEnabled = false
                 
                 return
             }
