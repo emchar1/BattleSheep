@@ -16,6 +16,7 @@
 		EA4F90092698BE31003BB4F6 /* Sheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F90082698BE31003BB4F6 /* Sheep.swift */; };
 		EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */; };
 		EA584C5A26A173480010F740 /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA584C5926A173480010F740 /* Coordinates.swift */; };
+		EA963F0826B2796F00AE4136 /* BattleSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA963F0726B2796F00AE4136 /* BattleSetupController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		EA4F90082698BE31003BB4F6 /* Sheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheep.swift; sourceTree = "<group>"; };
 		EA4F900A2698BE8A003BB4F6 /* BattleSheep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSheep.swift; sourceTree = "<group>"; };
 		EA584C5926A173480010F740 /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
+		EA963F0726B2796F00AE4136 /* BattleSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSetupController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				EA4F8FF52698BD7A003BB4F6 /* BattleSheepController.swift */,
+				EA963F0726B2796F00AE4136 /* BattleSetupController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA4F8FF62698BD7A003BB4F6 /* BattleSheepController.swift in Sources */,
+				EA963F0826B2796F00AE4136 /* BattleSetupController.swift in Sources */,
 				EA4F900B2698BE8A003BB4F6 /* BattleSheep.swift in Sources */,
 				EA4F8FF22698BD7A003BB4F6 /* AppDelegate.swift in Sources */,
 				EA584C5A26A173480010F740 /* Coordinates.swift in Sources */,
