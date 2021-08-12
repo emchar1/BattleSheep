@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7Vm-be-8S1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oHA-Z6-pvk">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Battle Sheep Controller-->
+        <!--BattleSheep-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="BattleSheepController" customModule="BattleSheep" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,16 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QD9-3D-6MO">
-                                <rect key="frame" x="10" y="54" width="394" height="798"/>
+                                <rect key="frame" x="10" y="54" width="394" height="749"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Computer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YiL-Nr-pkV">
-                                        <rect key="frame" x="159" y="0.0" width="76.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0xG-Zx-LPt" userLabel="Collection View CPU">
-                                        <rect key="frame" x="10" y="30.5" width="374" height="299"/>
+                                        <rect key="frame" x="10" y="0.0" width="374" height="299"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="0xG-Zx-LPt" secondAttribute="height" multiplier="1:0.8" id="KlY-x8-IYU"/>
@@ -64,8 +58,8 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KkJ-pd-82W">
-                                        <rect key="frame" x="158.5" y="339.5" width="77" height="60"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status Label which spans across two lines of text, which should be the longest needed. Well, I guess it needs to span 3 lines" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KkJ-pd-82W">
+                                        <rect key="frame" x="3.5" y="309" width="387.5" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="YSo-Ub-n9E"/>
                                         </constraints>
@@ -73,14 +67,17 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wins: 0, Losses: 0, Streak: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JS9-Vs-70n">
-                                        <rect key="frame" x="90" y="409.5" width="214" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Wins: 0, Losses: 0, Streak: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JS9-Vs-70n">
+                                        <rect key="frame" x="90" y="379" width="214" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="kcu-9x-Dcy"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KNo-sg-DDm">
-                                        <rect key="frame" x="10" y="440" width="374" height="299.5"/>
+                                        <rect key="frame" x="10" y="409" width="374" height="299.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="KNo-sg-DDm" secondAttribute="height" multiplier="1:0.8" id="tkG-MS-rIB"/>
@@ -118,7 +115,7 @@
                                         </cells>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X5r-MX-3aZ">
-                                        <rect key="frame" x="157.5" y="749.5" width="79" height="48.5"/>
+                                        <rect key="frame" x="157.5" y="718.5" width="79" height="30.5"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <color key="tintColor" systemColor="systemYellowColor"/>
                                         <state key="normal" title="New Game"/>
@@ -128,11 +125,8 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="YiL-Nr-pkV" firstAttribute="centerX" secondItem="QD9-3D-6MO" secondAttribute="centerX" id="5NM-F8-NcS"/>
                                     <constraint firstItem="0xG-Zx-LPt" firstAttribute="leading" secondItem="KNo-sg-DDm" secondAttribute="leading" id="Clh-Ij-gGU"/>
-                                    <constraint firstItem="YiL-Nr-pkV" firstAttribute="top" secondItem="QD9-3D-6MO" secondAttribute="top" id="MsG-U2-C0d"/>
                                     <constraint firstItem="KNo-sg-DDm" firstAttribute="top" secondItem="JS9-Vs-70n" secondAttribute="bottom" constant="10" id="l0H-dv-jt5"/>
-                                    <constraint firstItem="0xG-Zx-LPt" firstAttribute="top" secondItem="QD9-3D-6MO" secondAttribute="top" constant="30.5" id="siB-pm-pBI"/>
                                     <constraint firstItem="0xG-Zx-LPt" firstAttribute="leading" secondItem="QD9-3D-6MO" secondAttribute="leading" constant="10" id="xNv-Xc-ew3"/>
                                 </constraints>
                             </stackView>
@@ -146,6 +140,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QD9-3D-6MO" secondAttribute="trailing" constant="10" id="qe7-UI-yh4"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="BattleSheep" id="TeD-01-5Gd"/>
                     <connections>
                         <outlet property="collectionViewCPU" destination="0xG-Zx-LPt" id="cSL-q3-k3G"/>
                         <outlet property="collectionViewPlayer" destination="KNo-sg-DDm" id="pfu-gJ-pue"/>
@@ -155,9 +150,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="13.043478260869566" y="95.758928571428569"/>
+            <point key="canvasLocation" x="923.1884057971015" y="95.758928571428569"/>
         </scene>
-        <!--Battle Setup Controller-->
+        <!--Test-->
         <scene sceneID="nVK-12-i8Q">
             <objects>
                 <viewController id="7Vm-be-8S1" customClass="BattleSetupController" customModule="BattleSheep" customModuleProvider="target" sceneMemberID="viewController">
@@ -219,13 +214,32 @@
                             <constraint firstItem="i3C-If-Y9P" firstAttribute="top" secondItem="sah-Kh-bs0" secondAttribute="top" constant="30.5" id="QEy-0e-R6r"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Test" id="qRL-hm-l5m"/>
                     <connections>
                         <outlet property="collectionViewPlayer" destination="i3C-If-Y9P" id="HkY-N6-34V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Grz-Fe-bU2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1157.9710144927537" y="95.758928571428569"/>
+            <point key="canvasLocation" x="2068.1159420289855" y="95.758928571428569"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="yfe-D9-ST4">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="oHA-Z6-pvk" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3Cs-pp-4I1">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="7lP-aV-tr2"/>
+                        <segue destination="7Vm-be-8S1" kind="relationship" relationship="viewControllers" id="aL5-ZS-sAD"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SyS-qP-dbk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="13.043478260869566" y="95.758928571428569"/>
         </scene>
     </scenes>
     <resources>
