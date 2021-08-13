@@ -21,13 +21,7 @@ class BattleSetupController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "SheepCellular")
         collectionView.isUserInteractionEnabled = true
-//        collectionView.register(TitleCell.self, forCellWithReuseIdentifier: TitleCell.identifier)
-//        collectionView.register(HeaderView.self,
-//                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-//                                withReuseIdentifier: HeaderView.reuseIdentifier)
-//        collectionView.register(FooterView.self,
-//                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-//                                withReuseIdentifier: FooterView.reuseIdentifier)
+
         return collectionView
     }()
     
@@ -37,20 +31,15 @@ class BattleSetupController: UIViewController {
         collectionViewPlayer.delegate = self
         collectionViewPlayer.dataSource = self
         
-        
-        //this aint working
         view.addSubview(collectionViewSheep)
-        
-//        NSLayoutConstraint.activate([collectionViewSheep.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-//                                     collectionViewSheep.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-//                                     view.trailingAnchor.constraint(equalTo: collectionViewSheep.trailingAnchor, constant: 20),
-//                                     view.bottomAnchor.constraint(equalTo: collectionViewSheep.bottomAnchor, constant: 200)])
-        
-        NSLayoutConstraint.activate([collectionViewSheep.widthAnchor.constraint(equalToConstant: 250),
-                                     collectionViewSheep.heightAnchor.constraint(equalToConstant: 5)])
+        NSLayoutConstraint.activate([collectionViewSheep.topAnchor.constraint(equalTo: view.topAnchor,
+                                                                              constant: view.frame.size.height / 2 + 50),
+                                     collectionViewSheep.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     collectionViewSheep.widthAnchor.constraint(equalToConstant: 250),
+                                     collectionViewSheep.heightAnchor.constraint(equalToConstant: 25)])
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
-        collectionViewPlayer.addGestureRecognizer(panGestureRecognizer)
+        collectionViewSheep.addGestureRecognizer(panGestureRecognizer)
     }
     
     @objc func didPan(_ recognizer: UIPanGestureRecognizer) {
@@ -84,18 +73,6 @@ class BattleSetupController: UIViewController {
                            completion: nil)
         }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 
@@ -110,9 +87,7 @@ extension BattleSetupController: UICollectionViewDelegate, UICollectionViewDataS
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        
         cell.backgroundColor = .lightGray
-        
         return cell
     }
     
