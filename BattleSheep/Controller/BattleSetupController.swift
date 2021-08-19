@@ -10,20 +10,7 @@ import UIKit
 class BattleSetupController: UIViewController {
     
     @IBOutlet weak var collectionViewPlayer: UICollectionView!
-    
-    let collectionViewSheep: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .green
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "SheepCellular")
-        collectionView.isUserInteractionEnabled = true
 
-        return collectionView
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,15 +18,29 @@ class BattleSetupController: UIViewController {
         collectionViewPlayer.delegate = self
         collectionViewPlayer.dataSource = self
         
-        view.addSubview(collectionViewSheep)
-        NSLayoutConstraint.activate([collectionViewSheep.topAnchor.constraint(equalTo: view.topAnchor,
-                                                                              constant: view.frame.size.height / 2 + 50),
-                                     collectionViewSheep.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     collectionViewSheep.widthAnchor.constraint(equalToConstant: 250),
-                                     collectionViewSheep.heightAnchor.constraint(equalToConstant: 25)])
+        let s0 = CreateSheep(size: 2, color: .white, superView: view, collectionViewPlayer: collectionViewPlayer)
+        let s1 = CreateSheep(size: 3, color: .white, superView: view, collectionViewPlayer: collectionViewPlayer)
+        let s2 = CreateSheep(size: 3, color: .white, superView: view, collectionViewPlayer: collectionViewPlayer)
+        let s3 = CreateSheep(size: 4, color: .white, superView: view, collectionViewPlayer: collectionViewPlayer)
+        let s4 = CreateSheep(size: 5, color: .white, superView: view, collectionViewPlayer: collectionViewPlayer)
+
+        view.addSubview(s0.collectionView)
+        view.addSubview(s1.collectionView)
+        view.addSubview(s2.collectionView)
+        view.addSubview(s3.collectionView)
+        view.addSubview(s4.collectionView)
         
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
-        collectionViewSheep.addGestureRecognizer(panGestureRecognizer)
+        s0.activateConstraints(at: CGPoint(x: view.frame.width / 2, y: view.frame.height / 2))
+        s1.activateConstraints(at: CGPoint(x: view.frame.width / 2, y: view.frame.height / 2 + 30))
+        s2.activateConstraints(at: CGPoint(x: view.frame.width / 2, y: view.frame.height / 2 + 60))
+        s3.activateConstraints(at: CGPoint(x: view.frame.width / 2, y: view.frame.height / 2 + 90))
+        s4.activateConstraints(at: CGPoint(x: view.frame.width / 2, y: view.frame.height / 2 + 120))
+
+        s0.collectionView.addGestureRecognizer(s0.addGesture(target: self, action: #selector(didPan(_:))))
+        s1.collectionView.addGestureRecognizer(s1.addGesture(target: self, action: #selector(didPan(_:))))
+        s2.collectionView.addGestureRecognizer(s2.addGesture(target: self, action: #selector(didPan(_:))))
+        s3.collectionView.addGestureRecognizer(s3.addGesture(target: self, action: #selector(didPan(_:))))
+        s4.collectionView.addGestureRecognizer(s4.addGesture(target: self, action: #selector(didPan(_:))))
     }
     
     @objc func didPan(_ recognizer: UIPanGestureRecognizer) {
@@ -98,5 +99,12 @@ extension BattleSetupController: UICollectionViewDelegate, UICollectionViewDataS
         let cellSize = (collectionView.frame.width - CGFloat(2 * edgeInsets + (numColumns - 1) * cellBorderSize)) / CGFloat(numColumns)
         
         return CGSize(width: cellSize, height: cellSize * 0.8)
+    }
+}
+
+
+extension BattleSetupController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }
